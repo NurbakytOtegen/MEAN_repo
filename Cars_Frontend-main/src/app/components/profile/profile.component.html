@@ -1,0 +1,113 @@
+<div class="profile-container">
+  <!-- Loading spinner -->
+  <div *ngIf="loading" class="loading-spinner">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <!-- Error message -->
+  <div *ngIf="error" class="error-message">
+    <mat-card>
+      <mat-card-content>
+        <p>{{ error }}</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Profile content -->
+  <div *ngIf="profile && !loading" class="profile-content">
+    <!-- User Info Card -->
+    <mat-card class="user-info-card">
+      <mat-card-header>
+        <mat-card-title>Профиль пользователя</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="user-details">
+          <!-- Name with edit functionality -->
+          <div class="edit-field">
+            <div *ngIf="!isEditingName" class="display-field">
+              <p><strong>Имя:</strong> {{ profile.user.name }}</p>
+              <button mat-button color="primary" (click)="startEditName()">Изменить</button>
+            </div>
+            <div *ngIf="isEditingName" class="edit-form">
+              <mat-form-field>
+                <mat-label>Новое имя</mat-label>
+                <input matInput [(ngModel)]="newName" required>
+              </mat-form-field>
+              <div class="edit-actions">
+                <button mat-button (click)="cancelEditName()">Отмена</button>
+                <button mat-raised-button color="primary" (click)="saveName()">Сохранить</button>
+              </div>
+            </div>
+          </div>
+
+          <p><strong>Email:</strong> {{ profile.user.email }}</p>
+          <p><strong>Роль:</strong> {{ profile.user.role }}</p>
+          <p><strong>Дата регистрации:</strong> {{ formatDate(profile.user.createdAt) }}</p>
+          <p><strong>Количество отзывов:</strong> {{ getReviewsCount() }}</p>
+          <p><strong>Средняя оценка:</strong> {{ getAverageRating() | number:'1.1-1' }}</p>
+
+          <!-- Password change section -->
+          <div class="password-section">
+            <div *ngIf="!isChangingPassword">
+              <button mat-button color="primary" (click)="startChangePassword()">Изменить пароль</button>
+            </div>
+            <div *ngIf="isChangingPassword" class="password-form">
+              <mat-form-field>
+                <mat-label>Текущий пароль</mat-label>
+                <input matInput type="password" [(ngModel)]="oldPassword" required>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Новый пароль</mat-label>
+                <input matInput type="password" [(ngModel)]="newPassword" required>
+              </mat-form-field>
+              <div class="edit-actions">
+                <button mat-button (click)="cancelChangePassword()">Отмена</button>
+                <button mat-raised-button color="primary" (click)="savePassword()">Сохранить</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Reviews Section -->
+    <div class="reviews-section">
+      <h2>Мои отзывы</h2>
+      
+      <!-- No reviews message -->
+      <mat-card *ngIf="profile.reviews.length === 0" class="no-reviews">
+        <mat-card-content>
+          <p>У вас пока нет отзывов</p>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Reviews list -->
+      <div class="reviews-list">
+        <mat-card *ngFor="let review of profile.reviews" class="review-card">
+          <mat-card-header>
+            <mat-card-title>{{ review.carId.brand }} {{ review.carId.model }} ({{ review.carId.year }})</mat-card-title>
+            <mat-card-subtitle>
+              Оценка: {{ review.rating }} / 5
+              <div class="stars">
+                <span *ngFor="let star of getRatingStars(review.rating)">{{ star }}</span>
+              </div>
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p>{{ review.comment }}</p>
+            <div class="car-details">
+              <p><strong>Цена:</strong> {{ review.carId.price | currency }}</p>
+              <p><strong>Пробег:</strong> {{ review.carId.mileage }} км</p>
+              <p><strong>Двигатель:</strong> {{ review.carId.engine_vol }} л</p>
+              <p><strong>Трансмиссия:</strong> {{ review.carId.transmission }}</p>
+            </div>
+            <p class="review-date">Отзыв оставлен: {{ formatDate(review.createdAt) }}</p>
+          </mat-card-content>
+          <mat-card-actions>
+            <a mat-button [routerLink]="['/cars', review.carId.id]">Перейти к автомобилю</a>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div> 

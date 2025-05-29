@@ -1,0 +1,14 @@
+const express = require('express');
+const router = express.Router();
+const authController = require('../controllers/authController');
+const { auth } = require('../middleware/auth');
+
+// Публичные маршруты
+router.post('/register', authController.register);
+router.post('/login', authController.login);
+
+// Защищенные маршруты
+router.get('/profile', auth, authController.getProfile);
+router.patch('/profile', auth, authController.updateProfile);
+
+module.exports = router; 

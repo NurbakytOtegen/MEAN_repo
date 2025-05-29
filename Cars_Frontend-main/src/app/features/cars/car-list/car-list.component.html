@@ -1,0 +1,41 @@
+<div class="container">
+  <aside class="filters">
+    <form (ngSubmit)="applyFilters()">
+      <h2>Фильтры</h2>
+      <div class="filter-group">
+        <label for="brand">Марка</label>
+        <select id="brand" [(ngModel)]="filters.brand" name="brand">
+          <option value="">Все</option>
+          <option *ngFor="let brand of brands" [value]="brand">{{ brand }}</option>
+        </select>
+      </div>
+
+      <!-- Пример других фильтров -->
+      <div class="filter-group">
+        <label for="model">Модель</label>
+        <input id="model" [(ngModel)]="filters.model" name="model" placeholder="Введите модель" />
+      </div>
+
+      <div class="filter-group">
+        <label for="year">Год</label>
+        <input type="number" id="year" [(ngModel)]="filters.year" name="year" placeholder="от 2000" />
+      </div>
+
+      <button type="submit" class="apply-btn">Применить</button>
+    </form>
+  </aside>
+
+  <section class="car-list">
+    <div *ngFor="let car of cars" class="car-card">
+      <img [src]="car.imageUrl" alt="{{ car.brand }} {{ car.model }}" />
+      <div class="car-info">
+        <h3>{{ car.brand }} {{ car.model }}</h3>
+        <p class="car-meta">{{ car.year }} • {{ car.mileage }} км</p>
+        <p class="car-price">{{ car.price | currency:'KZT' }}</p>
+        <a [routerLink]="['/cars', car.id]" class="details-link">Подробнее</a>
+      </div>
+    </div>
+
+    <!-- <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls> -->
+  </section>
+</div>

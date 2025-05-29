@@ -1,0 +1,46 @@
+<div class="favorites-container">
+  <h2>My Favorites</h2>
+
+  <!-- Loading state -->
+  <div class="loading-spinner" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Loading your favorites...</p>
+  </div>
+
+  <!-- Error state -->
+  <div class="error-message" *ngIf="error">
+    <p>{{ error }}</p>
+    <button (click)="loadFavorites()">Try Again</button>
+  </div>
+
+  <!-- Empty state -->
+  <div class="empty-state" *ngIf="!loading && !error && favorites.length === 0">
+    <i class="fas fa-heart-broken"></i>
+    <h2>No Favorite Cars Yet</h2>
+    <p>Start adding cars to your favorites to see them here!</p>
+    <a routerLink="/cars" class="browse-cars-btn">Browse Cars</a>
+  </div>
+
+  <!-- Favorites grid -->
+  <div class="favorites-grid" *ngIf="!loading && !error && favorites.length > 0">
+    <div class="car-card" *ngFor="let favorite of favorites">
+      <div class="car-image" *ngIf="favorite.carId?._id">
+        <img [src]="favorite.carId.image_url" [alt]="favorite.carId.brand + ' ' + favorite.carId.model">
+        <button class="remove-favorite-btn" (click)="removeFromFavorites(favorite.carId._id || '')">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="car-info" *ngIf="favorite.carId?._id">
+        <h3>{{ favorite.carId.brand }} {{ favorite.carId.model }}</h3>
+        <p class="car-year">{{ favorite.carId.year }}</p>
+        <p class="car-price">{{ favorite.carId.price | currency }}</p>
+        <div class="car-details">
+          <span><i class="fas fa-tachometer-alt"></i> {{ favorite.carId.mileage | number }} km</span>
+          <span><i class="fas fa-cog"></i> {{ favorite.carId.transmission }}</span>
+          <span><i class="fas fa-car"></i> {{ favorite.carId.car_type }}</span>
+        </div>
+        <a [routerLink]="['/cars', favorite.carId._id]" class="view-details-btn">View Details</a>
+      </div>
+    </div>
+  </div>
+</div> 

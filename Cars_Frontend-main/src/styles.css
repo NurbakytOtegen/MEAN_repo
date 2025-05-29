@@ -1,0 +1,36 @@
+/* You can add global styles to this file, and also import other style files */
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+html, body { 
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+body {
+  background-color: #f5f5f5;
+}
+
+.mat-typography {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+/* Material Button Styles */
+.mat-mdc-button,
+.mat-mdc-raised-button,
+.mat-mdc-flat-button {
+  font-weight: 500 !important;
+  text-transform: none !important;
+}
+
+/* Material Dialog Styles */
+.mat-mdc-dialog-container {
+  --mdc-dialog-container-color: white;
+  border-radius: 8px;
+}
+
+/* Material Snackbar Styles */
+.mat-mdc-snack-bar-container {
+  --mdc-snackbar-container-color: #323232;
+  --mdc-snackbar-supporting-text-color: white;
+}

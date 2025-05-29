@@ -1,0 +1,129 @@
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  display: flex;
+  max-width: 1200px;
+  margin: auto;
+  padding: 1rem;
+  gap: 1.5rem;
+}
+
+.filters {
+  width: 280px;
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.filters h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  color: #333;
+}
+
+.filter-group {
+  margin-bottom: 1rem;
+}
+
+.filter-group label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: bold;
+  color: #555;
+}
+
+.filter-group select,
+.filter-group input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.apply-btn {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #0063f7;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.apply-btn:hover {
+  background-color: #004fcc;
+}
+
+.car-list {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.car-card {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.car-card:hover {
+  transform: translateY(-4px);
+}
+
+.car-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.car-info {
+  padding: 1rem;
+}
+
+.car-info h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+  color: #222;
+}
+
+.car-meta {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.car-price {
+  margin: 0.75rem 0;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #000;
+}
+
+.details-link {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: #f2f2f2;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  color: #333;
+  transition: background-color 0.2s;
+}
+
+.details-link:hover {
+  background-color: #e0e0e0;
+}
+

@@ -1,0 +1,102 @@
+<div class="reviews-container">
+  <!-- Rating Statistics -->
+  <div class="rating-stats" *ngIf="ratingStats">
+    <h3>Rating Statistics</h3>
+    <div class="average-rating">
+      <span class="rating-value">{{ ratingStats.avgRating | number:'1.1-1' }}</span>
+      <app-star-rating [value]="ratingStats.avgRating" [disabled]="true"></app-star-rating>
+      <span class="total-reviews">{{ ratingStats.totalReviews }} reviews</span>
+    </div>
+    
+    <div class="rating-bars">
+      <div class="rating-bar" *ngFor="let i of [5,4,3,2,1]">
+        <span class="rating-label">{{ i }} stars</span>
+        <div class="progress">
+          <div class="progress-bar" 
+               [style.width.%]="calculateRatingPercentage(getRatingCount(i))">
+          </div>
+        </div>
+        <span class="rating-count">{{ getRatingCount(i) }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Review Form -->
+  <div class="review-form" *ngIf="currentUserId && canWriteReview()">
+    <h3>{{ isEditing ? 'Edit Review' : 'Write a Review' }}</h3>
+    <form [formGroup]="reviewForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="rating">Rating:</label>
+        <app-star-rating formControlName="rating"></app-star-rating>
+        <div class="error-message" *ngIf="reviewForm.get('rating')?.errors?.['required'] && 
+             reviewForm.get('rating')?.touched">
+          Rating is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="comment">Comment:</label>
+        <textarea id="comment" 
+                  formControlName="comment" 
+                  class="form-control" 
+                  rows="4">
+        </textarea>
+        <div class="error-message" *ngIf="reviewForm.get('comment')?.errors?.['required'] && 
+             reviewForm.get('comment')?.touched">
+          Comment is required
+        </div>
+        <div class="error-message" *ngIf="reviewForm.get('comment')?.errors?.['minlength']">
+          Comment must be at least 3 characters
+        </div>
+        <div class="error-message" *ngIf="reviewForm.get('comment')?.errors?.['maxlength']">
+          Comment must not exceed 1000 characters
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" 
+                [disabled]="!reviewForm.valid" 
+                class="btn btn-primary">
+          {{ isEditing ? 'Update Review' : 'Submit Review' }}
+        </button>
+        <button type="button" 
+                *ngIf="isEditing" 
+                (click)="resetForm()" 
+                class="btn btn-secondary">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Blocked User Message -->
+  <div class="blocked-message alert alert-warning" *ngIf="currentUser?.isBlocked">
+    <p>Your account is currently blocked. You cannot write reviews.</p>
+  </div>
+
+  <!-- Reviews List -->
+  <div class="reviews-list">
+    <h3>Reviews</h3>
+    <div class="review-card" *ngFor="let review of reviews">
+      <div class="review-header">
+        <app-star-rating [value]="review.rating" [disabled]="true"></app-star-rating>
+        <div class="review-date">
+          {{ review.createdAt | date }}
+        </div>
+      </div>
+
+      <div class="review-content">
+        {{ review.comment }}
+      </div>
+
+      <div class="review-actions" *ngIf="canModifyReview(review)">
+        <button class="btn btn-sm btn-primary" (click)="editReview(review)">Edit</button>
+        <button class="btn btn-sm btn-danger" (click)="deleteReview(review.id!)">Delete</button>
+      </div>
+    </div>
+
+    <div class="no-reviews" *ngIf="reviews.length === 0">
+      No reviews yet. Be the first to write a review!
+    </div>
+  </div>
+</div> 

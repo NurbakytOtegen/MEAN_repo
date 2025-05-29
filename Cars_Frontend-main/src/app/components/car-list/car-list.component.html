@@ -1,0 +1,83 @@
+<div class="cars-container">
+  <aside class="filters-section">
+    <div class="search-bar">
+      <input type="text" [(ngModel)]="searchTerm" (input)="onSearch()" placeholder="Search cars...">
+    </div>
+    <div class="filters">
+      <div class="filter-group">
+        <select [(ngModel)]="filters.brand" (change)="onBrandChange()">
+          <option value="">All Brands</option>
+          <option *ngFor="let brand of uniqueBrands" [value]="brand">{{ brand }}</option>
+        </select>
+        <select [(ngModel)]="filters.model" (change)="applyFilters()">
+          <option value="">All Models</option>
+          <option *ngFor="let model of filteredModels" [value]="model">{{ model }}</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <input type="number" [(ngModel)]="filters.yearFrom" (input)="applyFilters()" placeholder="Year from">
+        <input type="number" [(ngModel)]="filters.yearTo" (input)="applyFilters()" placeholder="Year to">
+      </div>
+      <div class="filter-group">
+        <input type="number" [(ngModel)]="filters.priceFrom" (input)="applyFilters()" placeholder="Price from">
+        <input type="number" [(ngModel)]="filters.priceTo" (input)="applyFilters()" placeholder="Price to">
+      </div>
+      <div class="filter-group">
+        <select [(ngModel)]="filters.carType" (change)="applyFilters()">
+          <option value="">All Types</option>
+          <option *ngFor="let type of carTypes" [value]="type">{{ type | titlecase }}</option>
+        </select>
+        <select [(ngModel)]="filters.transmission" (change)="applyFilters()">
+          <option value="">All Transmissions</option>
+          <option *ngFor="let type of transmissionTypes" [value]="type">{{ type | titlecase }}</option>
+        </select>
+        <select [(ngModel)]="filters.condition" (change)="applyFilters()">
+          <option value="">All Conditions</option>
+          <option *ngFor="let condition of conditions" [value]="condition">{{ condition | titlecase }}</option>
+        </select>
+      </div>
+      <button class="reset-btn" (click)="resetFilters()">Reset Filters</button>
+    </div>
+  </aside>
+  <section class="main-content">
+    <div class="loading" *ngIf="loading">
+      <span>Loading cars...</span>
+    </div>
+    <div class="error-message" *ngIf="error">
+      <span>{{ error }}</span>
+      <button class="btn" (click)="loadCars()">Try Again</button>
+    </div>
+    <div class="cars-grid" *ngIf="!loading && !error">
+      <a class="car-card" *ngFor="let car of getDisplayedCars()" [routerLink]="['/cars', car.id]">
+        <div class="car-image">
+          <img [src]="car.image_url" [alt]="car.brand + ' ' + car.model">
+          <button class="favorite-btn" 
+                  [class.active]="car.id && favorites.has(car.id)"
+                  (click)="$event.stopPropagation(); toggleFavorite(car)">
+            <i class="fas" [class.fa-heart]="car.id && favorites.has(car.id)" [class.fa-heart-broken]="!(car.id && favorites.has(car.id))"></i>
+          </button>
+        </div>
+        <div class="car-info">
+          <h3>{{ car.brand }} {{ car.model }}</h3>
+          <p class="car-year">{{ car.year }}</p>
+          <p class="car-price">{{ car.price | currency }}</p>
+          <div class="car-details">
+            <span><i class="fas fa-tachometer-alt"></i> {{ car.mileage | number }} km</span>
+            <span><i class="fas fa-cog"></i> {{ car.transmission }}</span>
+            <span><i class="fas fa-car"></i> {{ car.car_type }}</span>
+          </div>
+          <div class="rating" *ngIf="car.avg_rating">
+            <span *ngFor="let star of getRatingStars(car.avg_rating)">{{ star }}</span>
+            <span class="rating-value">{{ car.avg_rating | number:'1.1-1' }}</span>
+          </div>
+          <span *ngIf="!car.id" class="error-text">Car ID is missing</span>
+        </div>
+      </a>
+    </div>
+    <div class="pagination" *ngIf="!loading && !error && totalPages > 1">
+      <button [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">Previous</button>
+      <span>Page {{ currentPage }} of {{ totalPages }}</span>
+      <button [disabled]="currentPage === totalPages" (click)="changePage(currentPage + 1)">Next</button>
+    </div>
+  </section>
+</div> 

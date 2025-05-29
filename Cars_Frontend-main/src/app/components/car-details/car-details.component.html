@@ -1,0 +1,75 @@
+<div class="car-details-container">
+  <button class="back-btn" (click)="goToCarsList()">← Back to Cars</button>
+
+  <div class="loading" *ngIf="loading">
+    <span>Loading car details...</span>
+  </div>
+
+  <div class="error-message" *ngIf="error">
+    <span>{{ error }}</span>
+    <button class="btn" (click)="loadCarDetails(route.snapshot.params['id'])">Try Again</button>
+  </div>
+
+  <div class="car-content" *ngIf="!loading && !error && car">
+    <div class="car-header">
+      <h2>{{ car.brand }} {{ car.model }} {{ car.year }}</h2>
+      <div class="rating-summary" *ngIf="car.avg_rating">
+        <div class="stars">
+          <span *ngFor="let star of getRatingStars(car.avg_rating)">{{ star }}</span>
+        </div>
+        <span class="rating-value">{{ car.avg_rating | number:'1.1-1' }} / 5</span>
+      </div>
+    </div>
+
+    <div class="car-info">
+      <div class="car-image">
+        <img [src]="car.image_url" [alt]="car.brand + ' ' + car.model">
+      </div>
+      
+      <div class="car-specs">
+        <div class="spec-item price">
+          <span class="label">Price</span>
+          <span class="value">{{ car.price | currency }}</span>
+        </div>
+        
+        <div class="spec-item">
+          <span class="label">Condition</span>
+          <span class="value">
+            <span [class]="car.is_new ? 'status-new' : 'status-used'">
+              {{ car.is_new ? 'New' : 'Used' }}
+            </span>
+          </span>
+        </div>
+        
+        <div class="spec-item">
+          <span class="label">Mileage</span>
+          <span class="value">{{ car.mileage | number }} km</span>
+        </div>
+
+        <div class="spec-item">
+          <span class="label">Transmission</span>
+          <span class="value">{{ car.transmission }}</span>
+        </div>
+
+        <div class="spec-item">
+          <span class="label">Type</span>
+          <span class="value">{{ car.car_type }}</span>
+        </div>
+
+        <div class="spec-item">
+          <span class="label">Engine Volume</span>
+          <span class="value">{{ car.engine_vol }} L</span>
+        </div>
+      </div>
+
+      <div class="car-description">
+        <h3>Description</h3>
+        <p>{{ car.description }}</p>
+      </div>
+    </div>
+
+    <div class="reviews-section" *ngIf="car?.id">
+      <app-reviews [carId]="car.id"></app-reviews>
+    </div>
+  </div>
+</div>
